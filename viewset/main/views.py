@@ -109,9 +109,23 @@ class AccountViewSet(viewsets.ModelViewSet):
         except Exception as e:
             print(e)
         return Response({"error":"Unable to access"}, status=400)
+                                          
 
+    def list(self, request, *args, **kwargs):
+        if request.GET.get('search'):
+
+            queryset = Profile.objects.filter(name__icontains = request.GET.get('search'))
+        else:
+            queryset = self.filter_queryset(self.get_queryset())
+        serialize = self.serializer_class(queryset,many = True) 
+    
+        return Response({"data":serialize.data})   
  
-
+#gte
+#lte
+#exclude
+#icontains - not case sensistve
+#iexact - case senistive
 
 
 
